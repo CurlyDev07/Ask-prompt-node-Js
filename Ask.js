@@ -6,7 +6,7 @@ var question = [
     'What is your fav hobby?',
     'What is your preferred programming language?'
 ];
-var result = [];
+var result = `----------------Result--------------------;\n`;
 var answer = [];
 
 // function result(string){
@@ -20,35 +20,23 @@ function ask(i){
 };
 
 process.stdin.on('data', function(data){
-    answer.push(data.toString());
-    process.stdout.write(data.toString());
-    
+    answer.push(data.toString());// push input data
+    process.stdout.write(data.toString()); // return data
+
     if (question.length > answer.length) {
         ask(answer.length);
     }else{
+        fs.writeFileSync('Result.md', result); // create a file with the content of result variable
+        
         var i = 0;
-        console.log('-----------------Questions-------------------');
        
         question.forEach(questions => {
-
             console.log(`${questions} => ${answer[i]}`);
-            result += questions.toString() +' => ' + answer[i].toString();
+            fs.appendFile('Result.md', `\n ${questions} => ${answer[i]} \n *************************`, function(err){
+                console.log(`${questions} => ${answer[i]} Appended`);
+            });// append each quest and answer
             i++;
         });
-
-      
-     
-        console.log('------------------------------------');
-        console.log(result);
-        console.log('------------------------------------');
-     
-
-        fs.writeFile('Result.md', result, function(err){
-            console.log('------------------------------------');
-            console.log("File Created");
-            console.log('------------------------------------');
-        });
-
         // process.exit();
     }
 });
